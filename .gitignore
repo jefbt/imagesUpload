@@ -1,0 +1,8 @@
+# environment variables
+backend/.env
+
+# temporary folders
+backend/tmp/
+
+#node modules
+backend/node_modules/
