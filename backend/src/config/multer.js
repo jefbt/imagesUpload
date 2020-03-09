@@ -1,3 +1,4 @@
+// gets the AWS info from the .env
 require("dotenv").config();
 
 const multer = require("multer");
@@ -7,7 +8,12 @@ const multerS3 = require("multer-s3");
 const aws = require("aws-sdk");
 
 const bucket = process.env.S3_BUCKET;
+const maxFileSize = 2 * 1024 * 1024;
 
+/**
+ * Storae Types
+ * Select from local to cloud storages (AWS S3)
+ */
 const storageTypes = {
   local: multer.diskStorage({
     destination: (req, file, cb) => {
@@ -40,11 +46,15 @@ const storageTypes = {
   })
 }
 
+/**
+ * Exports
+ * Multer config for uploading files to server or cloud
+ */
 module.exports = {
   dest: path.resolve(__dirname, "..", "..", "tmp", "uploads"),
   storage: storageTypes[process.env.STORAGE_TYPE],
   limits: {
-    fileSize: 2 * 1024 * 1024
+    fileSize: maxFileSize
   },
   fileFilter: (req, file, cb) => {
     const allowedMimes = [
